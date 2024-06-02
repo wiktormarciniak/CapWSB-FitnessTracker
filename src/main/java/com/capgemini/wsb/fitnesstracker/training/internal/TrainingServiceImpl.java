@@ -4,6 +4,10 @@ import com.capgemini.wsb.fitnesstracker.training.api.Training;
 import com.capgemini.wsb.fitnesstracker.training.api.TrainingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -17,7 +21,6 @@ public class TrainingServiceImpl implements TrainingService {
     @Autowired
     private TrainingRepository trainingRepository;
 
-
     /**
      * Zapisuje nowy trening w bazie danych.
      *
@@ -29,7 +32,6 @@ public class TrainingServiceImpl implements TrainingService {
         return trainingRepository.save(training);
     }
 
-
     /**
      * Zwraca listę wszystkich treningów zarejestrowanych w systemie.
      *
@@ -39,7 +41,6 @@ public class TrainingServiceImpl implements TrainingService {
     public List<Training> findAllTrainings() {
         return trainingRepository.findAll();
     }
-
 
     /**
      * Wyszukuje treningi przypisane do użytkownika o określonym ID.
@@ -60,7 +61,9 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public List<Training> findCompletedTrainings(String date) {
-        return trainingRepository.findCompletedAfter(date);
+        // Assuming the date is passed as a String and needs to be parsed
+        Date parsedDate = parseDate(date); // Implement this method to parse the date
+        return trainingRepository.findByEndTimeAfter(parsedDate);
     }
 
     /**
@@ -95,5 +98,14 @@ public class TrainingServiceImpl implements TrainingService {
                     return trainingRepository.save(existingTraining);
                 })
                 .orElseThrow(() -> new RuntimeException("Training not found"));
+    }
+
+    private Date parseDate(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return dateFormat.parse(date);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date format. Please use 'yyyy-MM-dd'.", e);
+        }
     }
 }

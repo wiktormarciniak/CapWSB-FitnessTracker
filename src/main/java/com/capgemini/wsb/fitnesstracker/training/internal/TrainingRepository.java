@@ -3,6 +3,7 @@ package com.capgemini.wsb.fitnesstracker.training.internal;
 import com.capgemini.wsb.fitnesstracker.training.api.Training;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,10 +23,10 @@ public interface TrainingRepository extends JpaRepository<Training, Long> {
     /**
      * Znajduje wszystkie treningi, które zostały zakończone po określonej dacie.
      *
-     * @param date Data w formacie String, po której powinny być wyszukane zakończone treningi.
+     * @param endTime Data, po której powinny być wyszukane zakończone treningi.
      * @return Lista treningów, które zakończyły się po podanej dacie.
      */
-    List<Training> findCompletedAfter(String date);
+    List<Training> findByEndTimeAfter(Date endTime);
 
     /**
      * Wyszukuje treningi według określonego typu aktywności.

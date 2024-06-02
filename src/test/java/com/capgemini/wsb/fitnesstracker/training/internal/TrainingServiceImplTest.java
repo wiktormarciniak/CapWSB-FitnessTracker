@@ -1,7 +1,6 @@
 package com.capgemini.wsb.fitnesstracker.training.internal;
 
 import com.capgemini.wsb.fitnesstracker.training.api.Training;
-import com.capgemini.wsb.fitnesstracker.training.api.TrainingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -76,12 +75,12 @@ class TrainingServiceImplTest {
     @Test
     void findCompletedTrainings_returnsTrainings() {
         List<Training> trainings = Arrays.asList(training);
-        when(trainingRepository.findCompletedAfter(any(String.class))).thenReturn(trainings);
+        when(trainingRepository.findByEndTimeAfter(any(Date.class))).thenReturn(trainings);
 
         List<Training> foundTrainings = trainingService.findCompletedTrainings("2023-06-01");
 
         assertEquals(1, foundTrainings.size());
-        verify(trainingRepository, times(1)).findCompletedAfter("2023-06-01");
+        verify(trainingRepository, times(1)).findByEndTimeAfter(any(Date.class));
     }
 
     @Test
