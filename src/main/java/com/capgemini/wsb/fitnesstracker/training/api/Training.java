@@ -3,17 +3,24 @@ package com.capgemini.wsb.fitnesstracker.training.api;
 import com.capgemini.wsb.fitnesstracker.training.internal.ActivityType;
 import com.capgemini.wsb.fitnesstracker.user.api.User;
 import jakarta.persistence.*;
+
+import java.util.Date;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
-import java.util.Date;
+
+/**
+ * Klasa encji reprezentująca trening w systemie FitnessTracker.
+ * Zawiera informacje o użytkowniku, czasie rozpoczęcia i zakończenia treningu,
+ * typie aktywności, przebytej odległości oraz średniej prędkości.
+ */
 @Entity
-@Table(name = "trainings")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Training {
 
     @Id
@@ -30,7 +37,7 @@ public class Training {
     @Column(name = "end_time", nullable = false)
     private Date endTime;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "activity_type", nullable = false)
     private ActivityType activityType;
 
@@ -40,13 +47,17 @@ public class Training {
     @Column(name = "average_speed")
     private double averageSpeed;
 
-    public Training(
-            final User user,
-            final Date startTime,
-            final Date endTime,
-            final ActivityType activityType,
-            final double distance,
-            final double averageSpeed) {
+    /**
+     * Konstruktor dla klasy Training, inicjalizujący wszystkie potrzebne pola.
+     *
+     * @param user Użytkownik przypisany do treningu.
+     * @param startTime Czas rozpoczęcia treningu.
+     * @param endTime Czas zakończenia treningu.
+     * @param activityType Typ aktywności (np. bieganie, pływanie).
+     * @param distance Dystans przebyty podczas treningu.
+     * @param averageSpeed Średnia prędkość osiągnięta podczas treningu.
+     */
+    public Training(User user, Date startTime, Date endTime, ActivityType activityType, double distance, double averageSpeed) {
         this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -54,5 +65,4 @@ public class Training {
         this.distance = distance;
         this.averageSpeed = averageSpeed;
     }
-
 }
